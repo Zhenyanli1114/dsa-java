@@ -27,22 +27,6 @@ public class HybridSortHW<T extends Comparable<T>> implements HybridSort<T> {
 
     private final IntroSort<T> engine2 = new IntroSort<>(new ShellSortKnuth<T>());
     private final AbstractSort<T> engine1 = new ShellSortKnuth<>();
-
-    private T[] mergeRecursively(T[][] arrays, int begin, int end) {
-        if (begin == end) {
-            // base case 1: only one array in the range
-            return arrays[begin];
-        } else if (begin + 1 == end) {
-            // base case 2: two arrays in the range
-            return merge(arrays[begin], arrays[end]);
-        } else {
-            // recursive case: more than two arrays in the range
-            int mid = (begin + end) / 2;
-            T[] left = mergeRecursively(arrays, begin, mid);
-            T[] right = mergeRecursively(arrays, mid + 1, end);
-            return merge(left, right);
-        }
-    }
     public T[] sort(T[][] input) {
         Class<?> classtype = input[0][0].getClass();
         int size = Arrays.stream(input).mapToInt(t -> t.length).sum();
@@ -78,27 +62,41 @@ public class HybridSortHW<T extends Comparable<T>> implements HybridSort<T> {
                 engine2.sort(arr);
             }
         }
-        //recurssion
         T[] merged = mergeRecursively(input, 0, input.length - 1);
         System.arraycopy(merged, 0, output, 0, merged.length);
         return output;
     }
     private T[] merge(T[] a, T[] b) {
-        int i = 0, j = 0, k = 0;
+        int i = 0, j = 0, t = 0;// keep track
        T[] merged = (T[]) new Comparable[a.length + b.length];
-        while (i < a.length && j < b.length) {
+        while (i <= a.length-1 && j <= b.length-1) {
             if (a[i].compareTo(b[j]) < 0) {
-                merged[k++] = a[i++];
+                merged[t++] = a[i++];
             } else {
-                merged[k++] = b[j++];
+                merged[t++] = b[j++];
             }
         }
-        while (i < a.length) {
-            merged[k++] = a[i++];
+        while (i <= a.length-1) {
+            merged[t++] = a[i++];
         }
-        while (j < b.length) {
-            merged[k++] = b[j++];
+        while (j <= b.length-1) {
+            merged[t++] = b[j++];
         }
         return merged;
+    }
+    private T[] mergeRecursively(T[][] arrays, int begin, int end) {
+        if (begin == end) {
+            // base case 1: only one array
+            return arrays[begin];
+        } else if (begin + 1 == end) {
+            // base case 2: two arrays
+            return merge(arrays[begin], arrays[end]);
+        } else {
+            // recursive case: more than two arrays
+            int mid = (begin + end) / 2;
+            T[] left = mergeRecursively(arrays, begin, mid);
+            T[] right = mergeRecursively(arrays, mid + 1, end);
+            return merge(left, right);
+        }
     }
 }

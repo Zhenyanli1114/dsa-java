@@ -25,11 +25,6 @@ import java.util.List;
 public abstract class ShellSort<T extends Comparable<T>> extends InsertionSort<T> {
 
 
-
-
-
-
-
     protected List<Integer> sequence;
 
     public ShellSort(Comparator<T> comparator) {
