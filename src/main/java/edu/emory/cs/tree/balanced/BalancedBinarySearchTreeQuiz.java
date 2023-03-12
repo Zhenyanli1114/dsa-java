@@ -34,39 +34,31 @@ public class BalancedBinarySearchTreeQuiz<T extends Comparable<T>> extends Abstr
             rotation(node);
         }
     }
-    protected BinaryNode<T> rotation(BinaryNode<T> node){
+    protected BinaryNode<T> rotation(BinaryNode<T> node) {
         BinaryNode<T> gp = node.getGrandParent();
         BinaryNode<T> parent = node.getParent();
         BinaryNode<T> uncle = node.getUncle();
         BinaryNode<T> newRoot = gp;
-
-        if (node.getUncle().hasLeftChild()){
-            if (node.getParent().hasLeftChild()){
+        if (node.getUncle().hasLeftChild()) {
+            if (node.getParent().hasLeftChild()) {
                 rotateRight(parent);
                 rotateLeft(gp);
                 rotateRight(gp);
+            } else if (node.getParent().hasRightChild()) {
+                rotateLeft(gp);
+                rotateRight(gp);
             }
-            else{
-                if(node.getParent().hasRightChild()){
-                    rotateLeft(gp);
-                    rotateRight(gp);
-                }
-            }
-        }
-        else{
-            if (node.getUncle().hasRightChild()){
-                if (node.getParent().hasLeftChild()){
+        } else {
+            if (node.getUncle().hasRightChild()) {
+                if (node.getParent().hasLeftChild()) {
                     rotateRight(parent);
                     rotateLeft(uncle);
                     rotateLeft(gp);
                     rotateRight(gp);
-                }
-                else {
-                    if (node.getParent().hasRightChild()) {
-                        rotateLeft(gp);
-                        rotateLeft(uncle);
-                        rotateRight(gp);
-                    }
+                } else if (node.getParent().hasRightChild()) {
+                    rotateLeft(gp);
+                    rotateLeft(uncle);
+                    rotateRight(gp);
                 }
             }
         }
