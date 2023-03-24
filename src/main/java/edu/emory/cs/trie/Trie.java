@@ -14,7 +14,6 @@
  * limitations under the License.
  */
 package edu.emory.cs.trie;
-
 /**
  * @author Jinho D. Choi ({@code jinho.choi@emory.edu})
  */
