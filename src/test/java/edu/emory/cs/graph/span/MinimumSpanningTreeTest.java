@@ -17,8 +17,6 @@ package edu.emory.cs.graph.span;
 
 import edu.emory.cs.graph.Graph;
 import org.junit.jupiter.api.Test;
-
-
 /**
  * @author Jinho D. Choi ({@code jinho.choi@emory.edu})
  */

@@ -27,7 +27,7 @@ import java.util.*;
 public class MSTAllHWTest {
     @Test
     public void testCompleteGraphs() {
-        MSTAll gold = new MSTAllHWSol();
+        MSTAllHW gold = new MSTAllHW();
         long st, et;
 
         for (int i = 1; i < 10; i++) {
@@ -52,8 +52,8 @@ public class MSTAllHWTest {
         graphs.add(getGraph5a());
 
         int i, correct = 0, total = graphs.size();
-        MSTAll gold = new MSTAllHWSol();
-        MSTAll system = new MSTAllHWSol();
+        MSTAllHW gold = new MSTAllHW();
+        MSTAllHW system = new MSTAllHW();
         Graph graph;
         boolean b;
 
@@ -284,7 +284,6 @@ public class MSTAllHWTest {
     public String getSequence(SpanningTree tree) {
         List<String> sequence = new ArrayList<>();
         String s;
-
         for (Edge edge : tree.getEdges()) {
             if (edge.getSource() < edge.getTarget())
                 s = edge.getSource() + "-" + edge.getTarget();
@@ -293,7 +292,6 @@ public class MSTAllHWTest {
 
             sequence.add(s);
         }
-
         Collections.sort(sequence);
         return String.join(" ", sequence);
     }
