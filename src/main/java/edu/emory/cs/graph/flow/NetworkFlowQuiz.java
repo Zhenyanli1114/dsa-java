@@ -15,10 +15,13 @@
  */
 package edu.emory.cs.graph.flow;
 
+import edu.emory.cs.graph.Edge;
 import edu.emory.cs.graph.Graph;
 import edu.emory.cs.graph.Subgraph;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 /** @author Jinho D. Choi */
@@ -30,8 +33,87 @@ public class NetworkFlowQuiz {
      * @param target the target vertex.
      * @return a set of all augmenting paths between the specific source and target vertices in the graph.
      */
-    public Set<Subgraph> getAugmentingPaths(Graph graph, int source, int target) {
-        // TODO: to be updated
-        return null;
+    HashSet<Subgraph> augmentingPaths = new HashSet<>();
+
+    public Set<Subgraph> findAugmentingPaths(Graph graph, int source, int target) {
+        int temp = target;
+        target = source;
+        source = temp;
+
+        ArrayList<Edge> initialEdges = (ArrayList<Edge>) graph.getIncomingEdges(source);
+        boolean[] visited = new boolean[graph.size()];
+
+        for (boolean value : visited) {
+            value = false;
+        }
+
+        for (int i = 0; i < initialEdges.size(); i++) {
+            visited[source] = true;
+            Subgraph subgraph = new Subgraph();
+            subgraph.addEdge(initialEdges.get(i));
+            depthFirstSearch(subgraph, graph, initialEdges.get(i), target, visited);
+        }
+
+        return augmentingPaths;
+    }
+
+    public void depthFirstSearch(Subgraph subgraph, Graph graph, Edge edge, int target, boolean[] visited) {
+        if (edge.getSource() == target) {
+            visited[target] = false;
+            List<Edge> existingEdges = subgraph.getEdges();
+            Subgraph newPath = new Subgraph();
+
+            for (int index = 0; index < existingEdges.size(); index++) {
+                newPath.addEdge(existingEdges.get(index));
+            }
+
+            augmentingPaths.add(newPath);
+        }
+
+        List<Edge> incomingEdges = graph.getIncomingEdges(edge.getSource());
+
+        for (int i = 0; i < incomingEdges.size(); i++) {
+            if (!visited[incomingEdges.get(i).getSource()]) {
+                visited[incomingEdges.get(i).getSource()] = true;
+                subgraph.addEdge(incomingEdges.get(i));
+                depthFirstSearch(subgraph, graph, incomingEdges.get(i), target, visited);
+
+                ArrayList<Edge> currentEdges = (ArrayList<Edge>) subgraph.getEdges();
+                currentEdges.remove(incomingEdges.get(i));
+                subgraph = new Subgraph();
+
+                for (int j = 0; j < currentEdges.size(); j++) {
+                    subgraph.addEdge(currentEdges.get(j));
+                }
+            }
+        }
+
+        visited[edge.getSource()] = false;
+    }
+
+    public static void main(String[] args) {
+        Graph graph = new Graph(6);
+
+        graph.setDirectedEdge(0, 1, 16);
+        graph.setDirectedEdge(0, 2, 13);
+        graph.setDirectedEdge(1, 2, 10);
+        graph.setDirectedEdge(2, 1, 4);
+        graph.setDirectedEdge(1, 3, 12);
+        graph.setDirectedEdge(2, 4, 14);
+        graph.setDirectedEdge(3, 2, 9);
+        graph.setDirectedEdge(3, 5, 20);
+        graph.setDirectedEdge(4, 3, 7);
+        graph.setDirectedEdge(4, 5, 4);
+
+        NetworkFlowQuiz networkFlowQuiz = new NetworkFlowQuiz();
+        Set<Subgraph> augmentingPaths = networkFlowQuiz.findAugmentingPaths(graph, 0, 5);
+
+        System.out.println("Augmenting paths:");
+        for (Subgraph subgraph : augmentingPaths) {
+            System.out.println("Path:");
+            for (Edge edge : subgraph.getEdges()) {
+                System.out.println(edge);
+            }
+        }
     }
 }
