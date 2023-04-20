@@ -15,22 +15,53 @@
  */
 package edu.emory.cs.graph.flow;
 
+import edu.emory.cs.graph.Edge;
 import edu.emory.cs.graph.Graph;
 import edu.emory.cs.graph.Subgraph;
-
+import java.util.*;
+import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
-/** @author Jinho D. Choi */
+/** @author Francis */
 public class NetworkFlowQuizExtra {
-    /**
-     * Using breadth-first traverse.
-     * @param graph  a directed graph.
-     * @param source the ource vertex.
-     * @param target the target vertex.
-     * @return a set of all augmenting paths between the specific source and target vertices in the graph.
-     */
     public Set<Subgraph> getAugmentingPaths(Graph graph, int source, int target) {
-        // TODO: to be updated
-        return null;
+        int b = target;
+        target =source;
+        source = b;
+        HashSet<Subgraph> result = new HashSet<>();
+        List<Edge> es = graph.getIncomingEdges(source);
+        Queue<Subgraph> queue = new LinkedList<>();
+        for (int i = 0;i<es.size();i++){
+            Subgraph c = new Subgraph();
+            c.addEdge(es.get(i));
+            queue.add(c);
+        }
+        while (!queue.isEmpty()){
+            int size = queue.size();
+            for (int i = 0;i<size;i++){
+                Subgraph path = queue.poll();
+                int lastnode = path.getEdges().get(path.getEdges().size()-1).getSource();
+                if (lastnode==target){
+                    result.add(path);
+                    continue;
+                }
+                es = graph.getIncomingEdges(lastnode);
+
+                for (int j = 0;j<=es.size()-1;j++){
+
+                    Subgraph c = new Subgraph();
+                    for (int k = 0;k<=path.getEdges().size()-1;k++){
+                        c.addEdge(path.getEdges().get(k));
+                    }
+                    if (!path.getVertices().contains(es.get(j).getSource())){
+                        c.addEdge(es.get(j));
+                        queue.add(c);
+                    }
+                }
+            }
+
+        }
+        return result;
     }
 }
