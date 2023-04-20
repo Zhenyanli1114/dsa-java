@@ -35,7 +35,7 @@ public class NetworkFlowQuiz {
      */
     HashSet<Subgraph> augmentingPaths = new HashSet<>();
 
-    public Set<Subgraph> findAugmentingPaths(Graph graph, int source, int target) {
+    public Set<Subgraph> getAugmentingPaths(Graph graph, int source, int target) {
         int temp = target;
         target = source;
         source = temp;
@@ -106,7 +106,7 @@ public class NetworkFlowQuiz {
         graph.setDirectedEdge(4, 5, 4);
 
         NetworkFlowQuiz networkFlowQuiz = new NetworkFlowQuiz();
-        Set<Subgraph> augmentingPaths = networkFlowQuiz.findAugmentingPaths(graph, 0, 5);
+        Set<Subgraph> augmentingPaths = networkFlowQuiz.getAugmentingPaths(graph, 0, 5);
 
         System.out.println("Augmenting paths:");
         for (Subgraph subgraph : augmentingPaths) {
